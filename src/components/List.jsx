@@ -1,63 +1,48 @@
+import { Box } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { listMovies } from "../api/movies";
-import { useTable } from "react-table";
+import Filters from "./Filters";
+import ListItems from "./ListItems";
 
 const List = () => {
   const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 0,
+    size: null,
+  });
+  const [filter, setFilter] = useState({});
+  const [totalElements, setTotalElements] = useState(0);
   useEffect(() => {
-    const pagination = {
-      page: 1,
-      size: 10,
-    };
-    const filter = {};
     listMovies(pagination, filter)
       .then(({ data }) => {
-        setData(data.content);
-        console.log(data.content);
+        let temp = data.content;
+        temp.sort((a, b) => Number(b.revenue) - Number(a.revenue));
+        console.log(temp.slice(0, 10));
+        setData(temp.slice(0, 10));
+        setTotalElements(data.totalElements);
+        console.log(data);
       })
       .catch((e) => console.log(e));
   }, []);
 
-  const header = ["ranking", "title", "year", "revenue", ""];
-
   return (
-    <table>
-      <thead>
-        <tr
-          style={{
-            borderBottom: "solid 3px red",
-            background: "aliceblue",
-            color: "black",
-            fontWeight: "bold",
-          }}
-        >
-          {header.map((column) => (
-            <th>{column}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row) => {
-          return (
-            <tr
-              style={{
-                height: "2rem",
-                borderBottom: "solid 5px black",
-                color: "black",
-              }}
-            >
-              <td>{row.rank}</td>
-              <td>{row.title}</td>
-              <td>{row.year}</td>
-              <td>{row.revenue}</td>
-              <td>
-                <img src={"/view.svg"} className="Movie-details" alt="view" />
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <Box>
+      <Filters
+        filter={filter}
+        setFilter={setFilter}
+        setPagination={setPagination}
+        setList={setData}
+      />
+      <ListItems
+        list={data}
+        setList={setData}
+        pagination={pagination}
+        setPagination={setPagination}
+        filter={filter}
+        totalElements={totalElements}
+        setTotalElements={setTotalElements}
+      />
+    </Box>
   );
 };
 
