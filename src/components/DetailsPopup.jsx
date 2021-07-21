@@ -1,64 +1,82 @@
-import { Dialog, Typography, Grid, IconButton } from "@material-ui/core";
-import React from "react";
+import { Dialog, Typography, Grid } from "@material-ui/core";
+import React, { useState } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import vars from "../styles/vars";
+import { formatRevenue } from "./utils";
 
 const styles = makeStyles((theme) => ({
   dialogTitle: {
     padding: "2rem 2rem 0 3rem ",
   },
   dialogContainer: {
-    padding: "2rem 3rem",
+    padding: "1rem 4rem 2rem 3rem",
   },
 }));
 
 const Popup = ({ data, open, close }) => {
   const classes = styles();
+  const [show, setShow] = useState(false);
 
   const DialogTitle = withStyles(styles)((props) => {
     const { children, classes, onClose, ...other } = props;
     return (
       <MuiDialogTitle disableTypography className={classes.root} {...other}>
-        <Grid container direction="column">
-          <Grid item>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item xs={10}>
+            <Typography variant="h4" color="primary">
+              {children}
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
             <Grid
               container
-              direction="row"
-              justifyContent="space-between"
+              direction={show ? "row-reverse" : "column"}
               alignItems="center"
+              justifyContent="center"
+              onMouseMove={() => setShow(true)}
+              onMouseLeave={() => setShow(false)}
+              style={{ cursor: "pointer", height: "49px" }}
+              onClick={onClose}
             >
-              <Typography variant="h4" color="primary">
-                {children}
-              </Typography>
-              {onClose ? (
-                <IconButton
-                  aria-label="close"
-                  className={classes.closeButton}
-                  onClick={onClose}
+              <Grid item>
+                <img
+                  src="/close.svg"
+                  alt="close"
+                  width="14px"
+                  height="14px"
+                  style={{ verticalAlign: "middle" }}
+                />
+              </Grid>
+              <Grid item>
+                <Typography
+                  variant="caption"
+                  style={{
+                    color: vars.grayBlue1,
+                    marginRight: show ? "0.5rem" : "0",
+                    fontWeight: "500",
+                  }}
                 >
-                  <img
-                    src="/close.svg"
-                    alt="close"
-                    width="24px"
-                    height="24px"
-                  />
-                </IconButton>
-              ) : null}
-            </Grid>
-            <Grid item>
-              <div
-                style={{
-                  marginTop: "1rem",
-                  width: "52px",
-                  height: "3px",
-                  borderBottom: `3px solid ${vars.lightBlue}`,
-                }}
-              />
+                  CLOSE
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
+        <div
+          style={{
+            marginTop: "1rem",
+            width: "52px",
+            height: "3px",
+            borderBottom: `3px solid ${vars.lightBlue}`,
+          }}
+        />
       </MuiDialogTitle>
     );
   });
@@ -211,7 +229,7 @@ const Popup = ({ data, open, close }) => {
               color="textPrimary"
               style={{ marginBottom: "0.5rem" }}
             >
-              {data.revenue}
+              {formatRevenue(data.revenue)}
             </Typography>
           </Grid>
         </Grid>

@@ -1,13 +1,15 @@
-import './App.css';
+
 import List from "./components/List"
 import Title from './components/Title';
-import { Container } from '@material-ui/core';
+import { AppBar, Container } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
+import vars from "./styles/vars";
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    maxWidth: "1024px",
-    margin: "0 auto",
+  appBar: {
+    width: "100%",
+    height: "50px",
+    background: vars.darkBlue,
   },
 }));
 
@@ -15,9 +17,8 @@ function App() {
   const classes = useStyles();
 
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
+    <div >
+      <AppBar position="static" className={classes.appBar} />
       <Container maxWidth="md" disableGutters>
         <Title />
         <List />

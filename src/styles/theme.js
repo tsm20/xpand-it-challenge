@@ -52,18 +52,25 @@ theme.overrides = {
       height: "30px"
 
     },
+    containedPrimary: {
+      backgroundColor: vars.lightBlue,
+      color: vars.darkBlue,
+      padding: "8px 12px",
+      '&:hover': {
+        backgroundColor: vars.lightBlue,
+        color: vars.darkBlue,
+
+      },
+    },
     outlinedPrimary: {
       backgroundColor: vars.white,
       border: `1px solid ${vars.gray1}`,
       color: vars.gray1,
       padding: "8px 12px",
-      // '&:disabled': {
-      //   background: vars.gray3,
-      //   color: vars.gray1
-      // },
       '&:hover': {
-        backgroundColor: vars.lightBlue,
-        color: vars.darkBlue,
+        backgroundColor: vars.white,
+        color: vars.gray1,
+        border: `1px solid ${vars.gray1}`,
       },
     },
   }

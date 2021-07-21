@@ -6,21 +6,24 @@ import ListItems from "./ListItems";
 
 const List = () => {
   const [data, setData] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 0,
-    size: null,
-  });
-  const [filter, setFilter] = useState({});
+  const [pagination, setPagination] = useState({});
   const [totalElements, setTotalElements] = useState(0);
+  const [hasFilter, setHasFilter] = useState("");
+
   useEffect(() => {
-    listMovies(pagination, filter)
+    const emptyFilter = {};
+    const initialPagination = {
+      page: 0,
+      size: 20,
+    };
+    listMovies(initialPagination, emptyFilter)
       .then(({ data }) => {
-        let temp = data.content;
-        temp.sort((a, b) => Number(b.revenue) - Number(a.revenue));
-        console.log(temp.slice(0, 10));
-        setData(temp.slice(0, 10));
+        setData(data.content);
         setTotalElements(data.totalElements);
-        console.log(data);
+        setPagination({
+          page: 0,
+          size: 20,
+        });
       })
       .catch((e) => console.log(e));
   }, []);
@@ -28,17 +31,15 @@ const List = () => {
   return (
     <Box>
       <Filters
-        filter={filter}
-        setFilter={setFilter}
-        setPagination={setPagination}
         setList={setData}
+        hasFilter={hasFilter}
+        setHasFilter={setHasFilter}
       />
       <ListItems
         list={data}
         setList={setData}
         pagination={pagination}
         setPagination={setPagination}
-        filter={filter}
         totalElements={totalElements}
         setTotalElements={setTotalElements}
       />

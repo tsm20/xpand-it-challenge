@@ -23,17 +23,16 @@ const ListItems = ({
   setList,
   pagination,
   setPagination,
-  filter,
   totalElements,
 }) => {
   const classes = useStyles();
+  const emptyFilter = {};
 
   const fetchMoreData = () => {
-    console.log("fetching...");
     const temp = { page: pagination.page + 1, size: pagination.size };
-    listMovies(temp, filter)
+    listMovies(temp, emptyFilter)
       .then(({ data }) => {
-        console.log(data);
+        //add new results to dataList
         let newList = list;
         data.content.forEach((el) => {
           newList.push(el);
@@ -43,6 +42,7 @@ const ListItems = ({
       })
       .catch((e) => console.log(e));
   };
+
   return (
     <Box mt={4}>
       <Grid container direction="row" className={classes.header}>
@@ -67,7 +67,7 @@ const ListItems = ({
           dataLength={list.length}
           next={fetchMoreData}
           hasMore={totalElements > list.length}
-          loader={<h4>Loading...</h4>}
+          loader={list.length ? <h4>Loading...</h4> : <h4>No results.</h4>}
         >
           {list.map((row) => {
             return (

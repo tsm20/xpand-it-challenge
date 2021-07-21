@@ -1,9 +1,10 @@
-import { Grid, IconButton, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import vars from "../styles/vars";
 import { getMovie } from "../api/movies";
-import Popup from "./Popup";
+import Popup from "./DetailsPopup";
+import { formatRevenue } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
   movies: {
@@ -34,14 +35,6 @@ const MovieItem = ({ data }) => {
     setOpenDetailsPopup(false);
   };
 
-  const formatRevenue = (num) => {
-    if (num) {
-      return "$" + num.toFixed(3).replace(/\./g, ",");
-    } else {
-      return "";
-    }
-  };
-
   return (
     <Grid container alignItems="center" className={classes.movies}>
       <Grid item xs={1} container justifyContent="center">
@@ -65,14 +58,14 @@ const MovieItem = ({ data }) => {
         </Typography>
       </Grid>
       <Grid item xs={1}>
-        <IconButton
-          disableFocusRipple
-          disableTouchRipple
-          disableRipple
+        <img
+          src="/view.svg"
+          alt="view-details"
+          width="15px"
+          height="12px"
+          style={{ cursor: "pointer" }}
           onClick={() => handleClickOpenDetails(data.id)}
-        >
-          <img src="/view.svg" alt="view-details" width="15px" height="12px" />
-        </IconButton>
+        />
       </Grid>
       <Popup
         data={details}
